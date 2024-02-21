@@ -1,4 +1,4 @@
-import characterModel from "./schemas/character.schema";
+import characterModel from "./schemas/character.schema.js";
 
 class CharacterRepository {
   constructor() {

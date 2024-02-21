@@ -1,4 +1,4 @@
-import CharacterRepository from "../repositories/characters.repository";
+import CharacterRepository from "../../repositories/characters.repository.js";
 
 class CharacterControllers {
   constructor() {
@@ -23,6 +23,7 @@ class CharacterControllers {
     res.json({ code: 200, status: "success", payload: characters, limit: limit ?? "none" });
   };
 
+
   async getCharacter(req, res, next) {
     const id = req.params.cid;
     let character;
@@ -36,6 +37,7 @@ class CharacterControllers {
 
     res.json({ code: 200, status: "success", payload: character })
   };
+
 
   async createCharacter(req, res, next) {
     const { name, description } = req.body;
@@ -54,6 +56,29 @@ class CharacterControllers {
     }
   }
   
+  
+  async updateCharacter(req, res, next) {
+    const id = req.params.cid;
+
+    try {
+      const result = await this.repository.updateById(id, req.body);
+      res.status(204).json({ code: 204, status: "updated", payload: result });
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deleteCharacter(req, res, next) {
+    const id = req.params.cid;
+
+    try {
+      const result = await this.repository.deleteById(id);
+      res.status(204).json({ code: 204, status: "deleted", payload: result });
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export default CharacterControllers;
