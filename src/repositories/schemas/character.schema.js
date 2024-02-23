@@ -12,10 +12,11 @@ const characterSchema = new Schema({
     required: true
   },
   thumbnail: {
-    type: [String]
+    type: String,
+    required: true
   }
 })
 
-const characterModel = model(characterCollection, characterSchema);
+const CharacterModel = model(characterCollection, characterSchema);
 
-export default characterModel;
+export default CharacterModel;

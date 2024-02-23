@@ -1,4 +1,6 @@
+import config from "../../config/config.js";
 import CharacterRepository from "../../repositories/characters.repository.js";
+import axios from "axios";
 
 class CharacterControllers {
   constructor() {
@@ -78,6 +80,38 @@ class CharacterControllers {
       next(error)
     }
   }
+
+  async populateDatabase(req, res, next) {
+    try {
+      const response = await axios.get(`https://gateway.marvel.com/v1/public/characters?${config.API_MARVEL_KEY}&limit=100&offset=0`);
+      const charactersFromApi = response.data.data.results;
+
+      const charactersData = [];
+      for (let i = 0; i < charactersFromApi.length; i++) {
+        if(charactersFromApi[i].description === "" || charactersFromApi[i].thumbnail.path.slice(-19) === "image_not_available") continue;
+        let minimizedCharacter = {
+          name: charactersFromApi[i].name,
+          description: charactersFromApi[i].description,
+          thumbnail: charactersFromApi[i].thumbnail.path + "." + charactersFromApi[i].thumbnail.extension
+        };
+        charactersData.push(minimizedCharacter)
+      }
+
+      await this.repository.createMany(charactersData)
+      res.send("OK")
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deleteAllDocuments(req, res, next) {
+    try {
+      const result = await this.repository.deleteAll();
+      res.send(`${result.deletedCount} documents deleted`)
+    } catch (error) {
+      next(error)
+    }
+}
 
 }
 

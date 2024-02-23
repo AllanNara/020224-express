@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import config from "./config/config.js";
 import ContainerRoutes from "./routes/index.routes.js";
+import morgan from "morgan";
+import displayRoutes from "express-routemap"
 
 class App {
 	constructor() {
@@ -9,15 +11,20 @@ class App {
 		this.port = config.PORT;
     this.mongoUri = config.MONGO_URI
 		this.containerRoutes = new ContainerRoutes();
+
 		this.setup();
 	}
 
 	setup() {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
+		this.app.use(morgan("dev"));
+
 		this.app.use("/", this.containerRoutes.router);
+		
 		this.app.use(this.errorHandler);
 	}
+
 
 	errorHandler(err, req, res, next) {
 		console.error(err.stack);
@@ -39,6 +46,7 @@ class App {
     db.on("connected", () => {
       console.log(`MongoDB connected successfully!`);
       this.app.listen(this.port, () => {
+				displayRoutes(this.app)
         console.log(`Server listening on port ${this.port}`);
       });
     });

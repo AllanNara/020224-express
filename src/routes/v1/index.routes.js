@@ -10,7 +10,7 @@ class V1Routes {
   }
 
   initRoutes() {
-    this.router.use(`${this.path}/characters`, this.characterRoutes.router);
+    this.router.use(`${this.path}/`, this.characterRoutes.router);
   }
 }
 

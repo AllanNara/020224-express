@@ -10,11 +10,15 @@ class CharacterRoutes {
   }
 
   initCharacterRoutes() {
-    this.router.get(`${this.path}`, this.controllers.getAllCharacters);
-    this.router.get(`${this.path}/:cid`, this.controllers.getCharacter);
-    this.router.post(`${this.path}`, this.controllers.createCharacter);
-    this.router.put(`${this.path}/:cid`, this.controllers.updateCharacter);
-    this.router.put(`${this.path}/:cid`, this.controllers.deleteCharacter);
+    this.router.get(`${this.path}/seeds`, this.controllers.populateDatabase.bind(this.controllers));
+    this.router.get(`${this.path}/seeds/delete`, this.controllers.deleteAllDocuments.bind(this.controllers));
+
+    this.router.get(`${this.path}`, this.controllers.getAllCharacters.bind(this.controllers));
+    this.router.get(`${this.path}/:cid`, this.controllers.getCharacter.bind(this.controllers));
+    this.router.post(`${this.path}`, this.controllers.createCharacter.bind(this.controllers));
+    this.router.put(`${this.path}/:cid`, this.controllers.updateCharacter.bind(this.controllers));
+    this.router.delete(`${this.path}/:cid`, this.controllers.deleteCharacter.bind(this.controllers));
+
   }
 
 }

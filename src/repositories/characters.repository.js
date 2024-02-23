@@ -1,11 +1,15 @@
-import characterModel from "./schemas/character.schema.js";
+import CharacterModel from "./schemas/character.schema.js";
 
 class CharacterRepository {
   constructor() {
-    this.model = characterModel
+    this.model = CharacterModel
   };
 
   createOne = async(obj) => await this.model.create(obj);
+
+  createMany = async(obj) => await this.model.insertMany(obj);
+
+  deleteAll = async() => await this.model.deleteMany({});
 
   getAll = async() => await this.model.find({});
 
